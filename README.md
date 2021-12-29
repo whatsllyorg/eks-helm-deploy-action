@@ -25,7 +25,7 @@ Following inputs can be used as `step.with` keys
 ## Example usage
 
 ```yaml
-uses: ronjea/eks-helm-deploy-action@v1.1.4
+uses: z1digitalstudio/eks-helm-deploy-action@v1.1.4
 with:
   aws-access-key-id: ${{ secrets.AWS_ACCESS__KEY_ID }}
   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
