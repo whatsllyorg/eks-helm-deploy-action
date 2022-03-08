@@ -13,7 +13,7 @@ else
 fi
 
 # Helm Deployment
-UPGRADE_COMMAND="helm upgrade --kubeconfig /github/home/.kube/config --debug --timeout ${TIMEOUT}"
+UPGRADE_COMMAND="helm upgrade --kubeconfig /github/home/.kube/config --wait --timeout ${TIMEOUT}"
 for config_file in ${DEPLOY_CONFIG_FILES//,/ }
 do
     UPGRADE_COMMAND="${UPGRADE_COMMAND} -f ${config_file}"
