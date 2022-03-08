@@ -12,10 +12,8 @@ else
         update-kubeconfig --name ${CLUSTER_NAME} 
 fi
 
-cat /github/home/.kube/config
-
 # Helm Deployment
-UPGRADE_COMMAND="helm upgrade --timeout ${TIMEOUT}"
+UPGRADE_COMMAND="helm upgrade --kubeconfig /github/home/.kube/config --debug --timeout ${TIMEOUT}"
 for config_file in ${DEPLOY_CONFIG_FILES//,/ }
 do
     UPGRADE_COMMAND="${UPGRADE_COMMAND} -f ${config_file}"
