@@ -1,19 +1,28 @@
 FROM public.ecr.aws/docker/library/python:3.8-slim-buster
 
-# Install the toolset with better error handling
-RUN apt-get update -y && \
-    apt-get install -y curl && \
-    pip install --no-cache-dir awscli && \
-    curl --retry 3 https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash && \
-    curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.25.16/bin/linux/amd64/kubectl && \
-    chmod +x ./kubectl && \
-    mv ./kubectl /usr/local/bin/kubectl && \
-    helm plugin install https://github.com/jkroepke/helm-secrets --version v4.2.2 && \
-    apt-get clean && \
+# Install basic dependencies
+RUN apt-get update && \
+    apt-get install -y curl wget && \
     rm -rf /var/lib/apt/lists/*
 
-COPY deploy.sh /usr/local/bin/deploy
+# Install AWS CLI
+RUN pip install awscli
 
+# Install Helm (specific version to avoid script issues)
+RUN wget -O- https://get.helm.sh/helm-v3.12.3-linux-amd64.tar.gz | \
+    tar -xzO linux-amd64/helm > /usr/local/bin/helm && \
+    chmod +x /usr/local/bin/helm
+
+# Install kubectl (specific stable version)
+RUN curl -LO "https://dl.k8s.io/release/v1.28.0/bin/linux/amd64/kubectl" && \
+    chmod +x kubectl && \
+    mv kubectl /usr/local/bin/
+
+# Install helm-secrets plugin after verifying helm works
+RUN helm version && \
+    helm plugin install https://github.com/jkroepke/helm-secrets --version v4.2.2
+
+COPY deploy.sh /usr/local/bin/deploy
 RUN chmod +x /usr/local/bin/deploy
 
 CMD ["deploy"]
