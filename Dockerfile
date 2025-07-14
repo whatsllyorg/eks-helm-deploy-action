@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:3.8-slim-buster
+FROM public.ecr.aws/docker/library/python:3.11-slim-bookworm
 
 # Install basic dependencies
 RUN apt-get update && \
