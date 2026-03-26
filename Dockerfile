@@ -16,12 +16,13 @@ RUN curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VE
     rm -rf /tmp/aws /tmp/awscliv2.zip /tmp/awscliv2.zip.sig
 
 # Install Helm with checksum verification
-RUN wget -qO /tmp/helm.tar.gz "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" && \
-    wget -qO /tmp/helm.tar.gz.sha256sum "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz.sha256sum" && \
-    sha256sum -c /tmp/helm.tar.gz.sha256sum && \
-    tar -xzO -f /tmp/helm.tar.gz linux-amd64/helm > /usr/local/bin/helm && \
+RUN cd /tmp && \
+    wget -q "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz" && \
+    wget -q "https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz.sha256sum" && \
+    sha256sum -c "helm-${HELM_VERSION}-linux-amd64.tar.gz.sha256sum" && \
+    tar -xzO -f "helm-${HELM_VERSION}-linux-amd64.tar.gz" linux-amd64/helm > /usr/local/bin/helm && \
     chmod +x /usr/local/bin/helm && \
-    rm /tmp/helm.tar.gz /tmp/helm.tar.gz.sha256sum
+    rm "helm-${HELM_VERSION}-linux-amd64.tar.gz" "helm-${HELM_VERSION}-linux-amd64.tar.gz.sha256sum"
 
 # Install kubectl with checksum verification
 RUN curl -fsSLO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
