@@ -6,11 +6,14 @@ branding:
     color: yellow
 inputs:
     aws-secret-access-key:
-        description: 'AWS credentials used to login to eks.'
+        description: 'AWS secret access key part of the AWS credentials. Used to login to EKS.'
         required: true
     aws-access-key-id:
-        description: 'AWS credentials used to login to eks.'
+        description: 'AWS access key id part of the AWS credentials. Used to login to EKS.'
         required: true
+    aws-session-token:
+        description: 'AWS session token for temporary credentials (e.g. when assuming a role via OIDC).'
+        required: false
     aws-region:
         description: 'AWS region to use (default: us-west-2)'
         required: true
@@ -19,28 +22,28 @@ inputs:
         description: 'EKS cluster name.'
         required: true
     cluster-role-arn:
-        description: 'EKS cluster admin role arn.'
+        description: 'EKS cluster admin role ARN.'
         required: false
     config-files:
-        description: 'Comma separates list of helm values files.'
+        description: 'Comma-separated list of helm values files.'
         required: false
     namespace:
         description: 'Kubernetes namespace to use.'
         required: false
     values:
-        description: 'Comma separated list of value sets for helms. e.x: key1=value1,key2=value2'
+        description: 'Comma-separated list of value sets for helm. e.g: key1=value1,key2=value2'
         required: false
     name:
-        description: 'Name of the helm deploy.'
+        description: 'Name of the helm release.'
         required: true
     chart-path:
         description: 'The path of the chart.'
         required: true
         default: 'helm/'
     timeout:
-        description: 'Timeout for the job.'
+        description: 'Timeout for the helm upgrade (e.g. 5m, 10m0s).'
         required: true
-        default: 0
+        default: '5m'
 runs:
     using: 'docker'
     image: 'Dockerfile'
@@ -48,6 +51,7 @@ runs:
         AWS_REGION: ${{ inputs.aws-region }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
         AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
+        AWS_SESSION_TOKEN: ${{ inputs.aws-session-token }}
         CLUSTER_NAME: ${{ inputs.cluster-name }}
         CLUSTER_ROLE_ARN: ${{ inputs.cluster-role-arn }}
         DEPLOY_CONFIG_FILES: ${{ inputs.config-files }}
